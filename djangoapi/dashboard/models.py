@@ -22,3 +22,11 @@ class Invoice(models.Model):
   amount = models.DecimalField(max_digits=10, decimal_places=2)
   date = models.DateTimeField()
   status = models.CharField(choices=INVOICE_STATUS)
+
+class Product(models.Model):
+  def __str__(self):
+    return self.name
+  
+  name = models.CharField()
+  description = models.TextField(blank=True)
+  price = models.DecimalField(max_digits=10, decimal_places=2)

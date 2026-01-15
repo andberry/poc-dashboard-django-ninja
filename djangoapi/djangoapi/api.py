@@ -1,6 +1,6 @@
 from ninja import NinjaAPI, Schema
 from typing import List
-from dashboard.models import Customer, Invoice
+from dashboard.models import Customer, Invoice, Product
 api = NinjaAPI()
 
 # Add
@@ -71,3 +71,16 @@ class InvoiceSchemaOut(Schema):
 def invoicesList(request):
   invoicesQs = Invoice.objects.all()
   return invoicesQs
+
+
+# Dashboard API
+# Products list
+class ProductSchemaOut(Schema):
+    name: str
+    price: float
+    description: str
+
+@api.get('/products', response=List[ProductSchemaOut])
+def productsList(request):
+  productsQs = Product.objects.all()
+  return productsQs
