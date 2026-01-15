@@ -1,0 +1,24 @@
+from django.db import models
+
+# Create your models here.
+class Customer(models.Model):
+  def __str__(self):
+    return self.name
+
+  name = models.CharField()
+  email = models.CharField()
+
+INVOICE_STATUS = {
+  "PENDING": 'Pending',
+  "PAID": "Paid",
+  "CANCELLED": "Cancelled"
+}
+
+class Invoice(models.Model):
+  def __str__(self):
+    return f"{self.customer} ({self.amount} EUR)"
+
+  customer =  models.ForeignKey(Customer, on_delete=models.CASCADE)
+  amount = models.DecimalField(max_digits=10, decimal_places=2)
+  date = models.DateTimeField()
+  status = models.CharField(choices=INVOICE_STATUS)
