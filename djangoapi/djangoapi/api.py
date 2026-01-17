@@ -63,9 +63,9 @@ def customersList(request):
 # Dashboard API
 # Invoices list
 class InvoiceSchemaOut(Schema):
-    customer: CustomerSchemaOut
-    amount: float
-    status: str
+  customer: CustomerSchemaOut
+  amount: float
+  status: str
 
 @api.get('/invoices', response=List[InvoiceSchemaOut])
 def invoicesList(request):
@@ -76,11 +76,45 @@ def invoicesList(request):
 # Dashboard API
 # Products list
 class ProductSchemaOut(Schema):
-    name: str
-    price: float
-    description: str
+  name: str
+  price: float
+  description: str
 
 @api.get('/products', response=List[ProductSchemaOut])
 def productsList(request):
   productsQs = Product.objects.all()
   return productsQs
+
+
+# Dashboard API
+# Revenue Data
+class RevenueDataSchemaOut(Schema):
+  jan: float
+  feb: float
+  mar: float
+  apr: float
+  may: float
+  jun: float
+  jul: float
+  aug: float
+  sep: float
+  oct: float
+  nov: float
+  dec: float
+
+@api.get('/revenue-data', response=RevenueDataSchemaOut)
+def revenueData(request):
+  return {
+    'jan': 12.31,
+    'feb': 22.32,
+    'mar': 32.33,
+    'apr': 42.34,
+    'may': 52.35,
+    'jun': 62.36,
+    'jul': 72.37,
+    'aug': 82.38,
+    'sep': 92.39,
+    'oct': 102.41,
+    'nov': 112.42,
+    'dec': 122.43,
+  }
