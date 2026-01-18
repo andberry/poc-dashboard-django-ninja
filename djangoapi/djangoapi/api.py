@@ -118,3 +118,8 @@ def revenueData(request):
     'nov': 112.42,
     'dec': 122.43,
   }
+
+@api.get('/latest-invoice', response=InvoiceSchemaOut)
+def lastInvoice(request):
+  lastInvoicesQs = Invoice.objects.latest('date')
+  return lastInvoicesQs
