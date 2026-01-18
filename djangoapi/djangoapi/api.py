@@ -123,3 +123,19 @@ def revenueData(request):
 def lastInvoice(request):
   lastInvoicesQs = Invoice.objects.latest('date')
   return lastInvoicesQs
+
+class TotalsSchemaOut(Schema):
+  productsTotal: int
+  customersTotal: int
+  invoicesTotal: int
+
+@api.get('/totals', response=TotalsSchemaOut)
+def totals(request):
+  productsCount = Product.objects.count()
+  customersCount = Customer.objects.count()
+  invoicesCount = Invoice.objects.count()
+  return {
+    "productsTotal": productsCount,
+    "customersTotal": customersCount,
+    "invoicesTotal": invoicesCount
+  }
