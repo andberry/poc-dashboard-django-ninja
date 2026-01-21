@@ -166,8 +166,11 @@ class DocumentSchemaOut(Schema):
     return obj.updateDate.strftime(f"{day} %b %Y")
 
 @api.get('/documents', response=List[DocumentSchemaOut])
-def documents(request):
-  documentsQs = Document.objects.all()
+def documents(request, s: str = ''):
+  if s:
+    documentsQs = Document.objects.filter(title__contains=s)
+  else:
+    documentsQs = Document.objects.all()
   return documentsQs
 
 @api.get('/latest-documents', response=List[DocumentSchemaOut])
