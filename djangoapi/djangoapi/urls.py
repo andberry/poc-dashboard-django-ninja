@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.conf.urls.static import static
+
 """
 URL configuration for djangoapi project.
 
@@ -22,4 +25,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include("blog.urls")),
     path("api/", api.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

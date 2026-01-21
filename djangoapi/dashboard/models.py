@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 # Create your models here.
 class Customer(models.Model):
@@ -30,3 +31,20 @@ class Product(models.Model):
   name = models.CharField()
   description = models.TextField(blank=True)
   price = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+DOCUMENT_TYPE = {
+  'REPORT': 'Report',
+  'LEGAL': 'Legal',
+  'FINANCE': 'Finance',
+  'MEDIA': 'Media'
+}
+class Document(models.Model):
+  def __str__(self):
+    return self.title
+  
+  title = models.CharField()
+  file = models.FileField(upload_to="documents/")
+  uploadDate = models.DateTimeField(auto_now_add=True)
+  updateDate = models.DateTimeField(default=now )
+  type = models.CharField(choices=DOCUMENT_TYPE)

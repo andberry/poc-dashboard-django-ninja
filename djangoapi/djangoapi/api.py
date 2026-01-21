@@ -1,6 +1,6 @@
 from ninja import NinjaAPI, Schema
 from typing import List
-from dashboard.models import Customer, Invoice, Product
+from dashboard.models import Customer, Invoice, Product, Document, DOCUMENT_TYPE
 api = NinjaAPI()
 
 # Add
@@ -105,18 +105,18 @@ class RevenueDataSchemaOut(Schema):
 @api.get('/revenue-data', response=RevenueDataSchemaOut)
 def revenueData(request):
   return {
-    'jan': 12.31,
-    'feb': 22.32,
-    'mar': 32.33,
-    'apr': 42.34,
-    'may': 52.35,
-    'jun': 62.36,
-    'jul': 72.37,
-    'aug': 82.38,
-    'sep': 92.39,
-    'oct': 102.41,
-    'nov': 112.42,
-    'dec': 122.43,
+    'jan': 120.31,
+    'feb': 220.32,
+    'mar': 559.33,
+    'apr': 420.34,
+    'may': 520.35,
+    'jun': 620.36,
+    'jul': 349.37,
+    'aug': 820.38,
+    'sep': 920.39,
+    'oct': 458.41,
+    'nov': 987.42,
+    'dec': 786.43,
   }
 
 @api.get('/latest-invoice', response=InvoiceSchemaOut)
@@ -128,14 +128,49 @@ class TotalsSchemaOut(Schema):
   productsTotal: int
   customersTotal: int
   invoicesTotal: int
+  documentsTotal: int
 
 @api.get('/totals', response=TotalsSchemaOut)
 def totals(request):
   productsCount = Product.objects.count()
   customersCount = Customer.objects.count()
   invoicesCount = Invoice.objects.count()
+  documentsCount = Document.objects.count()
   return {
-    "productsTotal": productsCount,
-    "customersTotal": customersCount,
-    "invoicesTotal": invoicesCount
+    "productsTotal": productsCount * 10 +1,
+    "customersTotal": customersCount * 200 + 24,
+    "invoicesTotal": invoicesCount + 300 + 3,
+    "documentsTotal": documentsCount + 100 + 1
   }
+
+class DocumentSchemaOut(Schema):
+  id: int
+  title: str
+  file: str
+  updateDate: str
+  updateDateShort: str
+  type: str
+
+  @staticmethod
+  def resolve_type(obj):
+    return DOCUMENT_TYPE[obj.type]
+
+  @staticmethod
+  def resolve_updateDate(obj):
+    day = obj.updateDate.day
+    return obj.updateDate.strftime(f"%A, {day} %B %Y")
+  
+  @staticmethod
+  def resolve_updateDateShort(obj):
+    day = obj.updateDate.day
+    return obj.updateDate.strftime(f"{day} %b %Y")
+
+@api.get('/documents', response=List[DocumentSchemaOut])
+def documents(request):
+  documentsQs = Document.objects.all()
+  return documentsQs
+
+@api.get('/latest-documents', response=List[DocumentSchemaOut])
+def lastDocuments(request):
+  lastDocumentQs = Document.objects.order_by('updateDate')[0:2]
+  return lastDocumentQs
